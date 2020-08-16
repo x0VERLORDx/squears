@@ -1,0 +1,86 @@
+#visionZone {
+	height: 0px;
+}
+.table {
+	border: 1px solid #70ACE2;
+	position: absolute;
+	left: 60px;
+	top: 60px;
+}
+.square {
+	width: 50px;
+	height: 50px;
+	background: #70ACE2;
+}	
+.px2 {
+	padding: 27px;
+}
+.delColButton, .delRowButton {
+	width: 50px;
+	height: 50px;
+	background: #B40E0E;
+	position:absolute;
+	left: 64px;
+	
+	border: none;
+}	
+.delColButton::after, .delRowButton::after {
+	content: "";
+	background: white;
+	height: 2px; 
+	width: 10px;
+	position: absolute; 
+	left: 20px;
+	top: 24px;
+}
+.delColButton:hover, .delRowButton:hover{
+	background: #BF5849;
+
+}
+.delRowButton {
+
+	top: 64px;
+	left: 8px;
+	
+}	
+
+.addColButton, .addRowButton {
+
+	width: 50px;
+	height: 50px;
+	background: #E59A0C;
+	position: relative;
+	left: 275px;
+	top: 56px;
+	border: none;
+}
+.addColButton::after, .addRowButton::after{
+	content: "";
+	background: white;
+	height: 10px; 
+	width: 2px;
+	position: absolute; 
+	left: 24px;
+	top: 20px;
+}
+.addColButton:before, .addRowButton:before {
+	content: "";
+	background: white;
+	height: 2px; 
+	width: 10px;
+	position: absolute; 
+	left: 20px;
+	top: 24px;
+}
+.addColButton:hover, .addRowButton:hover{
+	background: #F9C25A;
+}
+.addRowButton {
+	left: 2px;
+	top: 276px;
+}
+
+
+button:active, button:focus {
+	outline: none ;
+}
