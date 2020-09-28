@@ -1,28 +1,27 @@
-#visionZone {
-	height: 0px;
+#wraper {
+	position: relative;
+	padding: 60px;
+	margin: -8px;
+	display: inline-block;
 }
 .table {
 	border: 1px solid #70ACE2;
-	position: absolute;
-	left: 60px;
-	top: 60px;
+	position: relative;
+	
 }
 .square {
 	width: 50px;
 	height: 50px;
 	background: #70ACE2;
 }	
-.px2 {
-	padding: 27px;
-}
 .delColButton, .delRowButton {
 	width: 50px;
 	height: 50px;
 	background: #B40E0E;
 	position:absolute;
-	left: 64px;
-	
 	border: none;
+	margin: 4px;
+	transition-duration: 0.3s;
 }	
 .delColButton::after, .delRowButton::after {
 	content: "";
@@ -35,23 +34,20 @@
 }
 .delColButton:hover, .delRowButton:hover{
 	background: #BF5849;
-
 }
 .delRowButton {
-
-	top: 64px;
-	left: 8px;
+	left: 0%;
 	
 }	
-
+.delColButton {
+	top: 0%;
+}
 .addColButton, .addRowButton {
-
 	width: 50px;
 	height: 50px;
 	background: #E59A0C;
-	position: relative;
-	left: 275px;
-	top: 56px;
+	position: absolute;
+	margin: 4px;
 	border: none;
 }
 .addColButton::after, .addRowButton::after{
@@ -75,12 +71,10 @@
 .addColButton:hover, .addRowButton:hover{
 	background: #F9C25A;
 }
-.addRowButton {
-	left: 2px;
-	top: 276px;
+.addColButton {
+	top: 60px;
+	right: 0%;
 }
-
-
 button:active, button:focus {
 	outline: none ;
 }
