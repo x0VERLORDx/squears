@@ -7,29 +7,13 @@ class TableInitialize extends HTMLElement {
 		);
 	}
 
-	get count() {
-		return this.getAttribute("count");
-	}
-	set count(val) {
-		this.setAttribute("count", val);
-	}
-	static get observedAttributes() {
-		return ["count"];
-	}
-	attributeChangedCallback(prop, oldVal, newVal) {
-		if (prop === "count") this.render();
-	}
-	//console.log('hi')
-	render() {
-		let cols = count;
-		console.log(cols);
-	}
-
 	connectedCallback() {
 		(function () {
 			// initialysing variables
-			let cols = 1;
-			let rows = 1;
+
+			let cols = t.getAttribute("cols");
+			//console.log(cols);
+			let rows = t.getAttribute("rows");
 			let colIndex = 0;
 			let rowIndex = 0;
 			const boxSize = 54;
@@ -77,6 +61,12 @@ class TableInitialize extends HTMLElement {
 				moveDelRowBtn();
 				show();
 			}
+			for (let j = 1; j != rows; j++) {
+				addRow();
+			}
+			for (let i = 1; i != cols; i++) {
+				addCol();
+			}
 
 			// onclick functions (buttons)
 
@@ -87,16 +77,19 @@ class TableInitialize extends HTMLElement {
 
 			function delColBtnOnclick() {
 				delCol();
+
 				delBtnStyleHide();
 			}
 
 			function addRowBtnOnclick() {
 				rowIndex = rows;
 				addRow();
+				rows++;
 			}
 
 			function addColBtnOnclick() {
 				colIndex = cols;
+				cols++;
 				addCol();
 			}
 
@@ -143,7 +136,6 @@ class TableInitialize extends HTMLElement {
 					let newCell = currentCell.cloneNode(true);
 					currentRow.appendChild(newCell);
 				}
-				cols++;
 			}
 
 			//adding row function
@@ -151,7 +143,6 @@ class TableInitialize extends HTMLElement {
 				const currentRow = document.getElementsByTagName("tr")[0];
 				let newRow = currentRow.cloneNode(true);
 				tbl.appendChild(newRow);
-				rows++;
 			}
 
 			//del functions
