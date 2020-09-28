@@ -1,163 +1,210 @@
-(function (){
-    let cols = 4;
-    let rows = 4;
-    let colIndex = 0;
-    let rowIndex = 0;
-    const tbl = document.getElementsByClassName('table')[0];
-    const vZone = document.getElementById('visionZone');
-    const addRowBtn = document.getElementsByClassName('addRowButton')[0];
-    const addColBtn = document.getElementsByClassName('addColButton')[0];
-    const delRowBtn = document.getElementsByClassName('delRowButton')[0];
-    const delColBtn = document.getElementsByClassName('delColButton')[0];
+class TableInitialize extends HTMLElement {
+	constructor() {
+		super();
+		body.insertAdjacentHTML(
+			"afterbegin",
+			'<div id="wraper"><button class="delColButton"></button><button class="delRowButton"></button><table class="table"><tr><td class="square"></td></tr></table><button class="addColButton"></button><button class="addRowButton"></button></div>'
+		);
+	}
 
-// функции для видимости кнопок
+	get count() {
+		return this.getAttribute("count");
+	}
+	set count(val) {
+		this.setAttribute("count", val);
+	}
+	static get observedAttributes() {
+		return ["count"];
+	}
+	attributeChangedCallback(prop, oldVal, newVal) {
+		if (prop === "count") this.render();
+	}
+	//console.log('hi')
+	render() {
+		let cols = count;
+		console.log(cols);
+	}
 
-vZone.addEventListener ("mouseover", function (){
-    if(rows > 1){
-        delRowBtn.style.visibility = "visible";
-    }
-    if(cols > 1){
-        delColBtn.style.visibility = "visible"; 
-    }
-});
-vZone.addEventListener ("mouseout", function(){
-    delColBtn.style.visibility = "hidden";
-    delRowBtn.style.visibility = "hidden";
-}); 
+	connectedCallback() {
+		(function () {
+			// initialysing variables
+			let cols = 1;
+			let rows = 1;
+			let colIndex = 0;
+			let rowIndex = 0;
+			const boxSize = 54;
+			const wraperPadding = 60;
+			// initialysing elements
 
-// функция для определения индекса 
+			const tbl = document.getElementsByClassName("table")[0];
+			const addRowBtn = document.getElementsByClassName(
+				"addRowButton"
+			)[0];
+			const addColBtn = document.getElementsByClassName(
+				"addColButton"
+			)[0];
+			const delRowBtn = document.getElementsByClassName(
+				"delRowButton"
+			)[0];
+			const delColBtn = document.getElementsByClassName(
+				"delColButton"
+			)[0];
 
-tbl.addEventListener ("mouseover", indexSet);
+			// event list
 
-function indexSet(event) {
+			tbl.addEventListener("mouseover", tblOnmouseover);
+			tbl.addEventListener("mouseout", delBtnStyleHide);
+			delRowBtn.addEventListener("mouseover", show);
+			delRowBtn.addEventListener("mouseout", delBtnStyleHide);
+			delColBtn.addEventListener("mouseover", show);
+			delColBtn.addEventListener("mouseout", delBtnStyleHide);
+			delRowBtn.addEventListener("click", delRowBtnOnclick);
+			delColBtn.addEventListener("click", delColBtnOnclick);
+			addRowBtn.addEventListener("click", addRowBtnOnclick);
+			addColBtn.addEventListener("click", addColBtnOnclick);
 
-    let cell = event.target;
-    if (cell.tagName.toLowerCase() != 'td')
-        return;
-    rowIndex = cell.parentNode.rowIndex;
-    colIndex = cell.cellIndex;
-};
+			// table functions
 
- //функция для передвижения кнопки удаления колонки
+			function tblOnmouseover(event) {
+				// index seting function
+				let cell = event.target;
+				if (cell.tagName.toLowerCase() == "td") {
+					rowIndex = cell.parentNode.rowIndex;
+					colIndex = cell.cellIndex;
+					// console.log(rowIndex,colIndex); //index check
+				}
+				moveDelColBtn();
+				moveDelRowBtn();
+				show();
+			}
 
+			// onclick functions (buttons)
 
- tbl.addEventListener ("mouseover", moveTop);
- function moveTop () {
-    const delay = 2;
-    let i = 0;
-    startTimer = function () {
-        let left = delColBtn.offsetLeft;
-        i = left + 1;
+			function delRowBtnOnclick() {
+				delRow();
+				delBtnStyleHide();
+			}
 
-        if (i < colIndex * 54 + 64) {
-            setTimeout(startTimer,delay);
-            delColBtn.style.left = left + 1 + 'px';
-            //console.log(left);
-        }
-        
-        
-        else if (i > 64 && i > colIndex * 54 + 64){
-            delColBtn.style.left = left - 1 + 'px';
-            setTimeout(startTimer,delay);
-        }
+			function delColBtnOnclick() {
+				delCol();
+				delBtnStyleHide();
+			}
 
-        if (i == colIndex * 54 + 64) {
-            return
-        }
-    }
-    const timer = setTimeout(startTimer,delay);
+			function addRowBtnOnclick() {
+				rowIndex = rows;
+				addRow();
+			}
 
-};
+			function addColBtnOnclick() {
+				colIndex = cols;
+				addCol();
+			}
 
-tbl.addEventListener ("mouseover", moveLeft);
-function moveLeft () {
-    const delay = 2;
-    let j = 0;
-    startTimer1 = function () {
-        bottom = delRowBtn.offsetTop;
-        j = bottom + 1;
-        if (j < rowIndex * 54 + 64) {
-            setTimeout(startTimer1,delay);
-            delRowBtn.style.top = bottom + 1 + 'px';
-        }
+			// visibility changeing functions for del buttons
 
-        else if ( j > 64 && j > rowIndex * 54 + 64){
-            setTimeout(startTimer1,delay);
-            delRowBtn.style.top = bottom - 1 + 'px'; 
-        }
-    }
-    const timer = setTimeout(startTimer1,delay);
+			function show() {
+				if (rows > 1) {
+					delRowBtn.style.opacity = 1;
+					delRowBtn.style.visibility = "visible";
+				}
+				if (cols > 1) {
+					delColBtn.style.opacity = 1;
+					delColBtn.style.visibility = "visible";
+				}
+			}
+
+			function delBtnStyleHide() {
+				delRowBtn.style.opacity = 0;
+				delRowBtn.style.visibility = "hidden";
+				delColBtn.style.opacity = 0;
+				delColBtn.style.visibility = "hidden";
+			}
+			//function for moveing delColBtn
+
+			function moveDelColBtn() {
+				delColBtn.style.left =
+					colIndex * boxSize + wraperPadding + "px";
+			}
+
+			// function for moveing delRowBtn
+
+			function moveDelRowBtn() {
+				delRowBtn.style.top = rowIndex * boxSize + wraperPadding + "px";
+			}
+
+			//adding functions
+
+			//adding colon function
+
+			function addCol() {
+				for (let i = 0; i < rows; i++) {
+					let currentRow = document.getElementsByTagName("tr")[i];
+					let currentCell = document.getElementsByTagName("td")[i];
+					let newCell = currentCell.cloneNode(true);
+					currentRow.appendChild(newCell);
+				}
+				cols++;
+			}
+
+			//adding row function
+			function addRow() {
+				const currentRow = document.getElementsByTagName("tr")[0];
+				let newRow = currentRow.cloneNode(true);
+				tbl.appendChild(newRow);
+				rows++;
+			}
+
+			//del functions
+			//function for deleteing row with certain index
+			function delRow() {
+				if (rows > 1) {
+					document
+						.getElementsByTagName("table")[0]
+						.deleteRow(rowIndex);
+					rows--;
+				}
+			}
+
+			//function for deleteing colon with certain index
+			function delCol() {
+				let currentRow = document.getElementsByTagName("tr");
+				let currentCell = document.getElementsByTagName("td");
+				if (cols > 1) {
+					for (let i = 0; i < currentRow.length; i++) {
+						let rowD = currentRow[i];
+						let currentCol = rowD.childNodes[colIndex];
+						currentCol.parentNode.removeChild(currentCol);
+					}
+					cols--;
+				}
+			}
+
+			//adding drag n drop
+			tbl.onmousedown = function (event) {
+				let shiftX =
+					event.clientX - wraper.getBoundingClientRect().left;
+				let shiftY = event.clientY - wraper.getBoundingClientRect().top;
+
+				moveAt(event.pageX, event.pageY);
+
+				function moveAt(pageX, pageY) {
+					wraper.style.left = pageX - shiftX + "px";
+					wraper.style.top = pageY - shiftY + "px";
+				}
+
+				function onMouseMove(event) {
+					moveAt(event.pageX, event.pageY);
+				}
+
+				document.addEventListener("mousemove", onMouseMove);
+
+				tbl.onmouseup = function () {
+					document.removeEventListener("mousemove", onMouseMove);
+					wraper.onmouseup = null;
+				};
+			};
+		})();
+	}
 }
 
-
-// удаления при клике на кнопку
-delRowBtn.addEventListener ("click", function(){
-	delRow();
-    addRowBtn.style.top = rows * 54 + 60 + 'px';
-    delRowBtn.style.visibility = "hidden";   // при нажатии делает кнопку невидимой
-});
-delColBtn.addEventListener ("click", function(){
-    delCol();
-    addColBtn.style.left = cols * 54 + 60 + 'px';
-    delColBtn.style.visibility = "hidden";
-});
-
-//добавления при клике
-addRowBtn.addEventListener ("click", function(){
-    rowIndex = rows;
-    delRowBtn.style.top = rows *54 + 64 + 'px';
-    addRow();
-    addRowBtn.style.top = rows * 54 + 60 + 'px';
-    
-});
-
-addColBtn.addEventListener ("click", function(){
-    colIndex = cols;
-    delColBtn.style.left = cols * 54 +64 + 'px';
-    addCol();
-    addColBtn.style.left = cols * 54 + 60 + 'px';
-    
-});
-
-//функция добавления колонки
-function addCol() {
-    for (let i = 0; i < rows; i++) {
-        let currentRow = document.getElementsByTagName('tr')[i];
-        let currentCell = document.getElementsByTagName('td')[i]
-        let newCell = currentCell.cloneNode(true);
-        currentRow.appendChild(newCell);
-    }
-    cols++;	
-}
-
-//функция добавления ряда
-function addRow() {
-	const currentRow = document.getElementsByTagName('tr')[0];
-	let newRow = currentRow.cloneNode(true);
-	tbl.appendChild(newRow); 
-	rows++;   
-}
-
-//функция удаления рада с выбраным индексом 
-function delRow() {
-	if (rows > 1) {
-        document.getElementsByTagName('table')[0].deleteRow(rowIndex);
-        rows--;
-    }
-}
-
-//функция удаления колонки с выбраным индексом
-function delCol() {
-	let currentRow = document.getElementsByTagName('tr');
-    let currentCell = document.getElementsByTagName('td');
-    if (cols > 1){
-    	for (let i = 0; i < currentRow.length; i++) {
-            let rowD = currentRow[i];
-            let currentCol = rowD.childNodes[colIndex];
-            currentCol.parentNode.removeChild(currentCol); 
-        }
-        cols--;
-    }
-}
-})();
-
+customElements.define("table-initialize", TableInitialize);
