@@ -9,9 +9,7 @@ class TableSquares extends HTMLElement {
 			<button class="delColButton"></button>
 			<button class="delRowButton"></button>
 			<table class="table">
-				<tr>
-					<td class="square"></td>
-				</tr>
+				<tr><td class="square"></td></tr>
 			</table>
 			<button class="addColButton"></button>
 			<button class="addRowButton"></button>
@@ -34,7 +32,15 @@ class TableSquares extends HTMLElement {
 		const addColBtn = this.shadow.querySelector(".addColButton");
 		const delRowBtn = this.shadow.querySelector(".delRowButton");
 		const delColBtn = this.shadow.querySelector(".delColButton");
-		const wraper = this.shadow.querySelector("#wraper");
+		let wraper = this.shadow.querySelector("#wraper");
+
+		//initialysing table
+		for (let j = 1; j != rows; j++) {
+			addRow();
+		}
+		for (let i = 1; i != cols; i++) {
+			addCol();
+		}
 		// event list
 
 		tbl.addEventListener("mouseover", tblOnmouseover);
@@ -60,12 +66,6 @@ class TableSquares extends HTMLElement {
 			moveDelColBtn();
 			moveDelRowBtn();
 			show();
-		}
-		for (let j = 1; j != rows; j++) {
-			addRow();
-		}
-		for (let i = 1; i != cols; i++) {
-			addCol();
 		}
 
 		// onclick functions (buttons)
@@ -170,14 +170,19 @@ class TableSquares extends HTMLElement {
 		tbl.onmousedown = function (event) {
 			let shiftX = event.clientX - wraper.getBoundingClientRect().left;
 			let shiftY = event.clientY - wraper.getBoundingClientRect().top;
-
+			/*console.log(
+				wraper.getBoundingClientRect().left,
+				wraper.getBoundingClientRect().top
+			);*/
+			//console.log(shiftX, wraper.getBoundingClientRect().top);
 			moveAt(event.pageX, event.pageY);
 
 			function moveAt(pageX, pageY) {
-				wraper.style.left = pageX - shiftX + "px";
-				wraper.style.top = pageY - shiftY + "px";
+				wraper.getBoundingClientRect().left = pageX - shiftX + "px";
+				wraper.getBoundingClientRect().top = pageY - shiftY + "px";
+				console.log(wraper.style.left, wraper.style.top);
 			}
-
+			wraper.style.zIndex = 100;
 			function onMouseMove(event) {
 				moveAt(event.pageX, event.pageY);
 			}
