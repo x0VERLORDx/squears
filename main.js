@@ -178,8 +178,8 @@ class TableSquares extends HTMLElement {
 			moveAt(event.pageX, event.pageY);
 
 			function moveAt(pageX, pageY) {
-				wraper.getBoundingClientRect().left = pageX - shiftX + "px";
-				wraper.getBoundingClientRect().top = pageY - shiftY + "px";
+				wraper.style.left = pageX - shiftX + "px";
+				wraper.style.top = pageY - shiftY + "px";
 				console.log(wraper.style.left, wraper.style.top);
 			}
 			wraper.style.zIndex = 100;
