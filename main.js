@@ -1,17 +1,26 @@
-class TableSquears extends HTMLElement {
+class TableSquares extends HTMLElement {
 	constructor() {
 		super();
 		this.shadow = this.attachShadow({ mode: "open" });
 
-		this.shadow.innerHTML =
-			'<link rel="stylesheet" href="style.css" /><div id="wraper"><button class="delColButton"></button><button class="delRowButton"></button><table class="table"><tr><td class="square"></td></tr></table><button class="addColButton"></button><button class="addRowButton"></button></div>';
+		this.shadow.innerHTML = `
+		<link rel="stylesheet" href="style.css" />
+		<div id="wraper">
+			<button class="delColButton"></button>
+			<button class="delRowButton"></button>
+			<table class="table">
+				<tr><td class="square"></td></tr>
+			</table>
+			<button class="addColButton"></button>
+			<button class="addRowButton"></button>
+		</div>`;
 	}
 
 	connectedCallback() {
 		// initialysing variables
-
-		let cols = squears.getAttribute("cols");
-		let rows = squears.getAttribute("rows");
+		const squares = this;
+		let cols = this.getAttribute("cols");
+		let rows = this.getAttribute("rows");
 		let colIndex = 0;
 		let rowIndex = 0;
 		const boxSize = 54;
@@ -23,7 +32,15 @@ class TableSquears extends HTMLElement {
 		const addColBtn = this.shadow.querySelector(".addColButton");
 		const delRowBtn = this.shadow.querySelector(".delRowButton");
 		const delColBtn = this.shadow.querySelector(".delColButton");
-		const wraper = this.shadow.querySelector("#wraper");
+		let wraper = this.shadow.querySelector("#wraper");
+
+		//initialysing table
+		for (let j = 1; j != rows; j++) {
+			addRow();
+		}
+		for (let i = 1; i != cols; i++) {
+			addCol();
+		}
 		// event list
 
 		tbl.addEventListener("mouseover", tblOnmouseover);
@@ -49,12 +66,6 @@ class TableSquears extends HTMLElement {
 			moveDelColBtn();
 			moveDelRowBtn();
 			show();
-		}
-		for (let j = 1; j != rows; j++) {
-			addRow();
-		}
-		for (let i = 1; i != cols; i++) {
-			addCol();
 		}
 
 		// onclick functions (buttons)
@@ -118,8 +129,8 @@ class TableSquears extends HTMLElement {
 
 		function addCol() {
 			for (let i = 0; i < rows; i++) {
-				let currentRow = squears.shadow.querySelectorAll("tr")[i];
-				let currentCell = squears.shadow.querySelectorAll("td")[i];
+				let currentRow = squares.shadow.querySelectorAll("tr")[i];
+				let currentCell = squares.shadow.querySelectorAll("td")[i];
 				let newCell = currentCell.cloneNode(true);
 				currentRow.appendChild(newCell);
 			}
@@ -127,7 +138,7 @@ class TableSquears extends HTMLElement {
 
 		//adding row function
 		function addRow() {
-			const currentRow = squears.shadow.querySelector("tr");
+			const currentRow = squares.shadow.querySelector("tr");
 			let newRow = currentRow.cloneNode(true);
 			tbl.appendChild(newRow);
 		}
@@ -136,15 +147,15 @@ class TableSquears extends HTMLElement {
 		//function for deleteing row with certain index
 		function delRow() {
 			if (rows > 1) {
-				squears.shadow.querySelector("table").deleteRow(rowIndex);
+				squares.shadow.querySelector("table").deleteRow(rowIndex);
 				rows--;
 			}
 		}
 
 		//function for deleteing colon with certain index
 		function delCol() {
-			let currentRow = squears.shadow.querySelectorAll("tr");
-			let currentCell = squears.shadow.querySelector("td");
+			let currentRow = squares.shadow.querySelectorAll("tr");
+			let currentCell = squares.shadow.querySelector("td");
 			if (cols > 1) {
 				for (let i = 0; i < currentRow.length; i++) {
 					let rowD = currentRow[i];
@@ -159,14 +170,19 @@ class TableSquears extends HTMLElement {
 		tbl.onmousedown = function (event) {
 			let shiftX = event.clientX - wraper.getBoundingClientRect().left;
 			let shiftY = event.clientY - wraper.getBoundingClientRect().top;
-
+			/*console.log(
+				wraper.getBoundingClientRect().left,
+				wraper.getBoundingClientRect().top
+			);*/
+			//console.log(shiftX, wraper.getBoundingClientRect().top);
 			moveAt(event.pageX, event.pageY);
 
 			function moveAt(pageX, pageY) {
-				wraper.style.left = pageX - shiftX + "px";
-				wraper.style.top = pageY - shiftY + "px";
+				wraper.getBoundingClientRect().left = pageX - shiftX + "px";
+				wraper.getBoundingClientRect().top = pageY - shiftY + "px";
+				console.log(wraper.style.left, wraper.style.top);
 			}
-
+			wraper.style.zIndex = 100;
 			function onMouseMove(event) {
 				moveAt(event.pageX, event.pageY);
 			}
@@ -181,4 +197,4 @@ class TableSquears extends HTMLElement {
 	}
 }
 
-customElements.define("table-squears", TableSquears);
+customElements.define("table-squares", TableSquares);
