@@ -35,11 +35,19 @@ class TableSquares extends HTMLElement {
 		let wraper = this.shadow.querySelector("#wraper");
 
 		//initialysing table
+
 		for (let j = 1; j != rows; j++) {
 			addRow();
 		}
 		for (let i = 1; i != cols; i++) {
 			addCol();
+		}
+		function wraperCorSet() {
+			let startTop = wraper.getBoundingClientRect().top;
+			let startLeft = wraper.getBoundingClientRect().left;
+			wraper.style.top = startTop + "px";
+			wraper.style.left = startLeft + "px";
+			console.log(wraper.style.top, wraper.style.left);
 		}
 		// event list
 
@@ -165,16 +173,18 @@ class TableSquares extends HTMLElement {
 				cols--;
 			}
 		}
-
 		//adding drag n drop
+
+		function wraperPos() {
+			wraper.style.position = "absolute";
+		}
+		setTimeout(wraperCorSet, 0);
+		setTimeout(wraperPos, 10);
+
 		tbl.onmousedown = function (event) {
 			let shiftX = event.clientX - wraper.getBoundingClientRect().left;
 			let shiftY = event.clientY - wraper.getBoundingClientRect().top;
-			/*console.log(
-				wraper.getBoundingClientRect().left,
-				wraper.getBoundingClientRect().top
-			);*/
-			//console.log(shiftX, wraper.getBoundingClientRect().top);
+
 			moveAt(event.pageX, event.pageY);
 
 			function moveAt(pageX, pageY) {
