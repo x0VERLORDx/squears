@@ -47,8 +47,12 @@ class TableSquares extends HTMLElement {
 			let startLeft = wraper.getBoundingClientRect().left;
 			wraper.style.top = startTop + "px";
 			wraper.style.left = startLeft + "px";
-			console.log(wraper.style.top, wraper.style.left);
 		}
+		function wraperPos() {
+			wraper.style.position = "absolute";
+		}
+		setTimeout(wraperCorSet, 0);
+		setTimeout(wraperPos, 10);
 		// event list
 
 		tbl.addEventListener("mouseover", tblOnmouseover);
@@ -175,12 +179,6 @@ class TableSquares extends HTMLElement {
 		}
 		//adding drag n drop
 
-		function wraperPos() {
-			wraper.style.position = "absolute";
-		}
-		setTimeout(wraperCorSet, 0);
-		setTimeout(wraperPos, 10);
-
 		tbl.onmousedown = function (event) {
 			let shiftX = event.clientX - wraper.getBoundingClientRect().left;
 			let shiftY = event.clientY - wraper.getBoundingClientRect().top;
@@ -200,6 +198,7 @@ class TableSquares extends HTMLElement {
 			document.addEventListener("mousemove", onMouseMove);
 
 			tbl.onmouseup = function () {
+				wraper.style.zIndex = 1;
 				document.removeEventListener("mousemove", onMouseMove);
 				wraper.onmouseup = null;
 			};
